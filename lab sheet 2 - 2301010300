@@ -1,0 +1,239 @@
+QUES 1: Implementing Static and Dynamic Arrays:
+ o Implement a static array and perform the following operations: insertion,
+ deletion, and traversal.
+ o Implement a dynamic array with similar operations and analyze the
+ performance differences compared to the static array
+ANS : i) STATIC ARRAY : 
+#include <iostream>
+using namespace std;
+class StaticArray {
+    int arr[10]; // Fixed-size array
+    int size;
+public:  StaticArray() : size(0) {}
+  // Insertion at the end
+    void insert(int value) {
+        if (size < 10) {
+            arr[size] = value;
+            size++;
+        } else {
+            cout << "Array is full, cannot insert " << value << endl;    }  }
+    // Deletion of an element at a specified index
+    void deleteAt(int index) {
+        if (index < 0 || index >= size) {
+            cout << "Invalid index for deletion." << endl;
+            return;   }
+        for (int i = index; i < size - 1; i++) {
+            arr[i] = arr[i + 1];   }
+        size--;   }
+    // Traversal of the array
+    void traverse() const {
+        for (int i = 0; i < size; i++) {
+            cout << arr[i] << " ";       }
+        cout << endl;    }};
+int main() {
+    StaticArray sArr;
+    // Insert elements
+    sArr.insert(10);
+    sArr.insert(20);
+    sArr.insert(30);
+    cout << "Static Array after insertion: ";
+    sArr.traverse();
+    // Delete element at index 1
+    sArr.deleteAt(1);
+    cout << "Static Array after deletion: ";
+    sArr.traverse();
+    return 0;}
+
+
+ii) DYNAMIC ARRAY IMPLIMENTATION : 
+#include <iostream>
+using namespace std;
+class DynamicArray {
+    int* arr;
+    int capacity;
+    int size;
+public:
+    // Constructor to initialize the dynamic array
+    DynamicArray() {
+        arr = new int[1];
+        capacity = 1;
+        size = 0;
+    }
+    // Insertion at the end with resizing if needed
+    void insert(int value) {
+        if (size == capacity) {
+            int* temp = new int[2 * capacity];
+            for (int i = 0; i < size; i++) {
+                temp[i] = arr[i];        }
+            delete[] arr;
+            arr = temp;
+            capacity *= 2;    }
+        arr[size] = value;
+        size++;   }
+    // Deletion of an element at a specified index
+    void deleteAt(int index) {
+        if (index < 0 || index >= size) {
+            cout << "Invalid index for deletion." << endl;
+            return;      }
+        for (int i = index; i < size - 1; i++) {
+            arr[i] = arr[i + 1];     }
+        size--; }
+    // Traversal of the dynamic array
+    void traverse() const {
+        for (int i = 0; i < size; i++) {
+            cout << arr[i] << " ";       }
+        cout << endl;  }
+    // Destructor to free the allocated memory
+    ~DynamicArray() {
+        delete[] arr;   }};
+int main() {
+    DynamicArray dArr;
+    // Insert elements
+    dArr.insert(10);
+    dArr.insert(20);
+    dArr.insert(30);
+    cout << "Dynamic Array after insertion: ";
+    dArr.traverse();
+    // Delete element at index 1
+    dArr.deleteAt(1);
+    cout << "Dynamic Array after deletion: ";
+    dArr.traverse();
+    return 0;}
+TIME COMPLEXITY: Operation	            Static Array (Fixed Size)	        Dynamic Array (Resizable)
+                Insertion at End	      O(1)	Amortized O(1),             O(n) when resizing is required
+                Deletion at Index      	O(n) (shift elements)	            O(n) (shift elements)
+                Traversal	              O(n)	                            O(n)
+QUES 2 : String Operations:
+ o Implement basic string operations such as concatenation, substring, and
+ comparison.
+ o Writeaprogram to count the frequency of each character in a given string.
+ANS : i) #include <iostream>
+#include <cstring>  // For strlen function if we want to use C-style strings
+using namespace std;
+class StringOperations {
+public:
+    static string concatenate(const string& str1, const string& str2) {
+        return str1 + str2;}
+    static string substring(const string& str, int start, int length) {
+        if (start < 0 || start >= str.length() || length < 0) {
+            throw out_of_range("Invalid start index or length for substring.");}
+        return str.substr(start, length); }
+    static int compare(const string& str1, const string& str2) {
+        if (str1 == str2) return 0;
+        else if (str1 < str2) return -1;
+        else return 1;   }};
+int main() {
+    string str1 = "Hello";
+    string str2 = "World";
+    string concatenated = StringOperations::concatenate(str1, str2);
+    cout << "Concatenated string: " << concatenated << endl;
+    try {
+        string sub = StringOperations::substring(concatenated, 0, 5);
+        cout << "Substring: " << sub << endl;
+    } catch (const out_of_range& e) {
+        cout << e.what() << endl; }
+   int result = StringOperations::compare(str1, str2);
+    if (result == 0) {
+        cout << "Strings are equal." << endl;
+    } else if (result < 0) {
+        cout << "First string is less than the second string." << endl;
+    } else {
+        cout << "First string is greater than the second string." << endl;  }
+    return 0;}
+
+
+ii) #include <iostream>
+#include <unordered_map>
+using namespace std;
+void countFrequency(const string& str) {
+    unordered_map<char, int> frequencyMap; // Hash map to store frequency of characters
+    for (char ch : str) {
+        frequencyMap[ch]++;}
+    cout << "Character frequencies:\n";
+    for (const auto& pair : frequencyMap) {
+        cout << "'" << pair.first << "' : " << pair.second << endl; }}
+int main() {
+    string input;
+    cout << "Enter a string: ";
+    getline(cin, input);
+    countFrequency(input);
+    return 0;}
+   Que 3 Algorithm Analysis:
+o	Write a report analyzing the time and space complexity of the array and string operations using Big O notation.
+o	Solve given recurrence relations and include the solutions in the report.
+ANS :  Time and Space Complexity of Static and Dynamic Array Operations
+Static Array
+Insertion at End:
+
+Time Complexity: O(1) if space is available.
+Space Complexity: O(n), where n is the number of elements in the array.
+
+Deletion at a Specific Index:
+
+Time Complexity: O(n) because elements must be shifted after the specified index to fill the gap.
+Space Complexity: O(1) for deletion since no additional space is required.
+
+Traversal:
+
+Time Complexity: O(n) since each element is accessed once.
+Space Complexity: O(1) for traversal, as we’re just reading the elements.
+
+2. Recurrence Relations for Basic Algorithms
+Binary Search
+Binary Search is a divide-and-conquer algorithm used to find an element in a sorted array. It works by repeatedly dividing the search interval in half.
+
+Recurrence Relation:
+𝑇(𝑛)=𝑇(𝑛/2)+𝑂(1)
+
+where:(𝑛) T(n) is the time complexity for a problem size 𝑛
+𝑇(𝑛/2)represents the recursive call on half of the array.
+O(1) is the constant time needed to compare the middle element.
+Solving the Recurrence: Using the recurrence 
+𝑇(𝑛)=𝑇(𝑛/2)+𝑂(1)
+
+By expanding, we get:
+𝑇(𝑛)=𝑇(𝑛/2)+1
+=(𝑛4)+2
+=𝑇(𝑛/8)+3
+⋮⋮After log2(𝑛) levels, we reach T(1), giving us:
+𝑇(𝑛)=𝑂(log2(𝑛))
+
+Time Complexity: 
+𝑂(log⁡𝑛)
+
+Space Complexity: 
+𝑂(1) for iterative binary search and 
+
+Merge Sort
+Merge Sort is a divide-and-conquer algorithm that sorts an array by recursively dividing it into halves, sorting each half, and then merging the two sorted halves.
+
+Recurrence Relation:
+
+𝑇(𝑛)=2𝑇(𝑛/2)+𝑂(𝑛)
+
+where:T(n) is the time complexity for sorting 𝑛 elements.
+2𝑇(𝑛/2) accounts for the recursive calls on two halves of the array.
+O(n) represents the merging step, which takes linear time.
+Solving the Recurrence: Expanding the recurrence relation:
+𝑇(𝑛)=2𝑇(𝑛/2)+𝑛
+=2(2𝑇(𝑛/4)+𝑛/2)+𝑛
+=8T( 8n)+3n
+⋮
+After log2(𝑛)log 2(n) levels, we reach T(1), giving us:
+𝑇(𝑛)=o(𝑛log𝑛)
+Time Complexity: 
+𝑂(𝑛log𝑛)
+
+Space Complexity: 
+
+O(n) due to the temporary arrays used for merging at each level of recursion.
+
+Summary of Complexity Analysis
+Algorithm                  	Time Complexity	              Space Complexity
+Binary Search	              𝑂(log𝑛)                     O(1) or O(logn)(recurssive)
+
+Merge Sort                  O(n log n)                  O(n)	
+
+Conclusion
+Binary Search is highly efficient for searching in sorted data due to its logarithmic time complexity.
+Merge Sort provides stable sorting with O(nlogn) complexity, making it efficient for large datasets, though it requires additional space for merging.
