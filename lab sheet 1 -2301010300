@@ -1,0 +1,290 @@
+1.	Multi-dimensional Arrays:
+i.	Implement a two-dimensional array and perform operations such as row-wise and column-wise insertion, deletion, and traversal.
+Ans: 
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class TwoDimensionalArray {
+    vector<vector<int>> array;
+
+public:
+    // Insert a new row at a specific position
+    void insertRow(int index, vector<int> row) {
+        if (index <= array.size())
+            array.insert(array.begin() + index, row);
+    }
+
+    // Insert a new column at a specific position
+    void insertColumn(int index, vector<int> column) {
+        if (!array.empty() && index <= array[0].size()) {
+            for (int i = 0; i < array.size(); i++) {
+                array[i].insert(array[i].begin() + index, column[i]);
+            }
+        }
+    }
+
+    // Delete a row at a specific index
+    void deleteRow(int index) {
+        if (index < array.size())
+            array.erase(array.begin() + index);
+    }
+
+    // Traverse the 2D array
+    void traverse() {
+        for (auto row : array) {
+            for (auto el : row) {
+                cout << el << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    TwoDimensionalArray tdArray;
+    
+    // Initial row insertion
+    tdArray.insertRow(0, {1, 2});
+    // Column insertion
+    tdArray.insertColumn(1, {3, 4});
+    // Row deletion
+    tdArray.deleteRow(0);
+
+    cout << "Array after row insertion, column insertion, and deletion:" << endl;
+    tdArray.traverse();
+
+    return 0;
+}
+Output:
+ 
+
+ii.	Implement a program to find the transpose of a given matrix.
+Ans:
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class TwoDimensionalArray {
+    vector<vector<int>> array;
+
+public:
+    // Insert a new row at a specific position
+    void insertRow(int index, vector<int> row) {
+        if (index <= array.size())
+            array.insert(array.begin() + index, row);
+    }
+
+    // Function to transpose the matrix
+    vector<vector<int>> transposeMatrix() {
+        vector<vector<int>> transpose(array[0].size(), vector<int>(array.size()));
+        for (int i = 0; i < array.size(); ++i) {
+            for (int j = 0; j < array[i].size(); ++j) {
+                transpose[j][i] = array[i][j];
+            }
+        }
+        return transpose;
+    }
+
+    // Set initial array for testing
+    void setInitialArray() {
+        insertRow(0, {1, 2});
+        insertRow(1, {3, 4});
+    }
+};
+
+int main() {
+    TwoDimensionalArray tdArray;
+    
+    // Set initial array
+    tdArray.setInitialArray();
+
+    cout << "Transpose of the matrix:" << endl;
+    vector<vector<int>> transposed = tdArray.transposeMatrix();
+    for (auto row : transposed) {
+        for (auto el : row) {
+            cout << el << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+Output:
+ 
+
+2.	Advanced String Operations:
+i.	Implement string pattern matching algorithms (e.g., Knuth-Morris-Pratt algorithm).
+Ans: 
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class StringAlgorithms {
+public:
+    // Knuth-Morris-Pratt Pattern Matching
+    int KMP(string text, string pattern) {
+        vector<int> lps = computeLPSArray(pattern);  // Compute the LPS (Longest Prefix Suffix) array
+        int i = 0, j = 0;
+
+        while (i < text.size()) {
+            if (pattern[j] == text[i]) {
+                j++;
+                i++;
+            }
+            if (j == pattern.size()) {
+                return i - j;  // Match found, return the starting index
+            } else if (i < text.size() && pattern[j] != text[i]) {
+                if (j != 0)
+                    j = lps[j - 1];  // Move the pattern index back based on the LPS array
+                else
+                    i++;  // Move the text index forward
+            }
+        }
+        return -1;  // No match found
+    }
+
+private:
+    // Compute the LPS array for the pattern
+    vector<int> computeLPSArray(string pattern) {
+        int len = 0;
+        vector<int> lps(pattern.size(), 0);
+        int i = 1;
+
+        while (i < pattern.size()) {
+            if (pattern[i] == pattern[len]) {
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                if (len != 0) {
+                    len = lps[len - 1];
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
+            }
+        }
+        return lps;
+    }
+};
+
+int main() {
+    StringAlgorithms sa;
+    
+    string text = "abxabcabcaby";
+    string pattern = "abcaby";
+    int index = sa.KMP(text, pattern);
+    
+    if (index != -1)
+        cout << "Pattern found at index: " << index << endl;
+    else
+        cout << "Pattern not found!" << endl;
+
+    return 0;
+}
+
+Output:
+ 
+
+ii.	Write a program to perform string compression using Run Length Encoding (RLE).
+Ans:
+#include <iostream>
+#include <string>
+using namespace std;
+
+string runLengthEncoding(string input) {
+    string output = "";
+    
+    for (int i = 0; i < input.length(); i++) {
+        int count = 1;
+        while (i + 1 < input.length() && input[i] == input[i + 1]) {
+            i++;
+            count++;
+        }
+        output += to_string(count) + input[i];  // Append the count followed by the character
+    }
+    
+    return output;
+}
+
+int main() {
+    string input = "aaabbbcccaaa";
+    string rle = runLengthEncoding(input);
+    cout << "Run Length Encoding: " << rle << endl;
+
+    return 0;
+}
+
+Output:
+ 
+
+3.	Complexity Analysis:
+i.	Write a report analyzing the time and space complexity of the implemented algorithms using Big O, Omega, and Theta notations.
+•	Big O (O) Notation:
+Definition: Big O represents the upper bound of an algorithm’s time complexity. It describes the worst-case scenario — the maximum time the algorithm will take as the input size increases.
+Purpose: Helps to understand the worst-case performance of the algorithm.
+Example: If an algorithm has a time complexity of O(n²), it means that in the worst case, the number of operations required grows quadratically with the input size.
+
+•	Omega (Ω) Notation:
+Definition: Omega represents the lower bound of an algorithm’s time complexity. It describes the best-case scenario — the minimum time the algorithm will take under optimal conditions.
+Purpose: Helps to understand the best-case performance of the algorithm.
+Example: If an algorithm has a time complexity of Ω(n), it means that in the best case, the number of operations required grows linearly with the input size.
+
+•	Theta (Θ) Notation:
+Definition: Theta represents the tight bound of an algorithm’s time complexity. It describes the average-case time complexity, providing an exact measure of the algorithm’s performance for random inputs.
+Purpose: Helps to understand the typical or expected behavior of the algorithm.
+Example: If an algorithm has a time complexity of Θ(n log n), it means that in the average case, the number of operations grows asymptotically as.
+
+ii.	Include best, average, and worst-case analyses for the algorithms.
+
+Ans:
+Bubble Sort Algorithm:
+Bubble Sort is a simple comparison-based sorting algorithm. It works by repeatedly stepping through the list, comparing adjacent elements, and swapping them if they are in the wrong order. The process is repeated until the list is sorted.
+
+Bubble Sort Algorithm (Pseudocode):
+BubbleSort(A):
+    n = length of A
+    for i from 0 to n-1:
+        swapped = false
+        for j from 0 to n-i-2:
+            if A[j] > A[j+1]:
+                swap A[j] and A[j+1]
+                swapped = true
+        if not swapped:
+            break  # The array is already sorted
+Time Complexity Analysis:
+•	Best Case (Ω(n)): The best case occurs when the array is already sorted. Only one pass is needed to confirm no swaps are required.
+Best Case Complexity: Ω(n).
+•	Average Case (Θ(n²)): On average, the algorithm compares each element with every other element, leading to quadratic time complexity.
+     Average Case Complexity: Θ(n²).
+•	Worst Case (O(n²)): The worst case occurs when the array is sorted in reverse order, requiring the maximum number of comparisons and swaps.
+Worst Case Complexity: O(n²).
+•	Space Complexity (O(1)): Bubble Sort uses a constant amount of space, as no additional data structures are needed.
+Space Complexity: O(1).
+
+Complexity Analysis Summary for Bubble Sort:
+Case	Time Complexity	Space Complexity
+
+
+Best Case
+
+	Ω(n)
+
+	O(1)
+
+
+Average Case
+
+	Θ(n²)
+
+	O(1)
+
+
+Worst Case
+
+	O(n²)
+
+	O(1)
+
+
